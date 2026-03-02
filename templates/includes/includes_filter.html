@@ -1,0 +1,85 @@
+{% load static %}
+
+<form action="{% url 'cars:index' %}" method="get">
+    <div class="card" style="position:sticky;top:18px">
+        <h3 style="margin-top:0">Фильтры</h3>
+    
+            <div style="display:flex;flex-direction:column;gap:8px">
+                {% comment %} <label>Цена от — до
+                    <div style="display:flex;gap:8px;margin-top:6px">
+                    <input type="number" id="price_min" placeholder="₸ от" />
+                    <input type="number" id="price_max" placeholder="₸ до" /> 
+                    </div>
+                </label>
+    
+                <label>Пробег до (км)
+                    <input type="number" id="mileage_max" placeholder="Например 100000" />
+                </label> {% endcomment %}
+    
+                <label>Марка
+                    <select id="brand" name="brand">
+                    <option value="">Все</option>
+                    {% for brand in brands %}
+                        <option value="{{ brand.id }}">{{ brand.name }}</option>
+                    {% endfor %} 
+                    </select>
+                </label>
+                <label>Модель
+                    <select id="model" name="model" disabled>
+                        <option value="">Сначала выберите марку</option>
+                    {% comment %} <option value="">Все</option>
+                    {% for model in models %}
+                        <option>{{ model.name }}</option>
+                    {% endfor %}  {% endcomment %}
+                    </select>
+                    <script>
+                        document.getElementById("brand").addEventListener("change", function() {
+
+                            const brandId = this.value;
+                            const modelSelect = document.getElementById("model");
+
+                            modelSelect.innerHTML = "<option>Загрузка...</option>";
+                            modelSelect.disabled = true;
+
+                            if (!brandId) {
+                                modelSelect.innerHTML = "<option value=''>Сначала выберите марку</option>";
+                                return;
+                            }
+
+                            fetch(`/ajax/load-models/?brand_id=${brandId}`)
+                                .then(response => response.json())
+                                .then(data => {
+
+                                    modelSelect.innerHTML = "<option value=''>Все</option>";
+
+                                    data.forEach(function(model) {
+                                        modelSelect.innerHTML +=
+                                            `<option value="${model.id}">${model.name}</option>`;
+                                    });
+
+                                    modelSelect.disabled = false;
+                                });
+                        });
+                    </script>
+                </label>
+                <label>Коробка передач
+                    <select id="transmission" name="transmission">
+                    <option value="">Все</option>
+                    {% for transmission in transmissions %}
+                        <option value="{{ transmission.id }}">{{ transmission.name }}</option>
+                    {% endfor %} 
+                    </select>
+                </label>
+                <label>Тип топлива
+                    <select id="fuel" name="fuel">
+                    <option value="">Все</option>
+                    {% for fuel in fuels %}
+                        <option value="{{ fuel.id }}">{{ fuel.name }}</option>
+                    {% endfor %} 
+                    </select>
+                </label>
+    
+                <button class="search-btn" onclick="applyFilters()">Показать</button>
+            </div>
+    </div>
+</form>

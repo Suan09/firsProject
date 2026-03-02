@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+  <head>
+
+    <style>
+      {% comment %} :root{--accent:#1e88e5;--muted:#6b7280;--card:#ffffff;--bg:#f6f7fb}
+      *{box-sizing:border-box}
+      body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:var(--bg);color:#111} {% endcomment %}
+      {% comment %} header{background:linear-gradient(90deg,#0f172a,#0b3a66);color:white;padding:24px} {% endcomment %}
+      {% comment %} .container{max-width:900px;margin:0 auto;padding:16px} {% endcomment %}
+      .logo{font-weight:700;letter-spacing:0.4px}
+
+      main{padding:30px 0}
+
+      .card{background:var(--card);border-radius:12px;padding:24px;box-shadow:0 8px 24px rgba(16,24,40,0.06)}
+      h2{margin-top:0}
+
+      .form-grid{display:grid;gap:16px}
+      @media(min-width:720px){
+        .form-grid{grid-template-columns:1fr 1fr}
+      }
+
+      label{display:flex;flex-direction:column;font-size:14px;color:#334155}
+      input, select, textarea{
+        margin-top:6px;
+        padding:10px;
+        border-radius:8px;
+        border:1px solid #e5e7eb;
+        font-size:14px;
+      }
+      textarea{min-height:120px;resize:vertical}
+
+      .full{grid-column:1/-1}
+
+      .btn-row{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+      .btn{padding:10px 16px;border-radius:8px;border:1px solid #e6e9ef;background:#fff;cursor:pointer}
+      .btn.primary{background:var(--accent);color:white;border:none}
+
+      footer{padding:20px 0;color:var(--muted);font-size:14px}
+    </style>
+  </head>
+  <main class="container">
+    <div class="card">
+      <h2>Размещение объявления</h2>
+
+      <form action="{% url 'cars:create_car' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-grid">
+
+          <label>
+            Марка автомобиля
+            <select id="brand" name="brand" required>
+              <option value="">Выберите</option>
+              {% for brand in brands %}
+                <option value="{{ brand.id }}">{{ brand.name }}</option>
+              {% endfor %}
+              {% comment %} <option>Toyota</option>
+              <option>Mercedes-Benz</option>
+              <option>BMW</option> {% endcomment %}
+            </select>
+          </label>
+
+          <label>
+            Модель
+            <select id="model" name="model" required>
+              <option value="">Выберите</option>
+              {% comment %} <option>Toyota</option>
+              <option>Mercedes</option>
+              <option>BMW</option> {% endcomment %}
+            </select>
+            <script>
+              document.addEventListener("DOMContentLoaded", function() {
+
+                  const brandSelect = document.getElementById("brand");
+                  const modelSelect = document.getElementById("model");
+
+                  brandSelect.addEventListener("change", function() {
+
+                      const brandId = this.value;
+
+                      // Если марка НЕ выбрана
+                      if (!brandId) {
+                          modelSelect.innerHTML = "<option value=''>Сначала выберите марку</option>";
+                          modelSelect.disabled = true;
+                          return;
+                      }
+
+                      // Если марка выбрана
+                      modelSelect.disabled = false;
+
+                      fetch(`/ajax/load-models/?brand_id=${brandId}`)
+                          .then(response => response.json())
+                          .then(data => {
+
+                              modelSelect.innerHTML = "<option value=''>Выберите модель</option>";
+
+                              data.forEach(function(model) {
+                                  modelSelect.innerHTML += 
+                                      `<option value="${model.id}">${model.name}</option>`;
+                              });
+
+                          });
+
+                  });
+
+              });
+            </script>
+          </label>
+
+          <label>
+            Год выпуска
+            <input type="number" name="year" placeholder="2020" required />
+          </label>
+
+          <label>
+            Цена (₸)
+            <input type="number" name="price" placeholder="Например 4500000" required />
+          </label>
+
+          <label>
+            Пробег (км)
+            <input type="number" name="mileage" placeholder="Например 120000" required />
+          </label>
+          <label>
+            Коробка передач
+              <select name="transmission" required>
+                <option value="">Выберите</option>
+                {% for tr in transmissions %}
+                  <option value="{{ tr.id }}">{{ tr.name }}</option>
+                {% endfor %}
+                {% comment %} <option>Автомат</option>
+                <option>Механика</option>
+                <option>Вариатор</option> {% endcomment %}
+            </select>
+          </label>
+
+          <label>
+            Тип топлива
+            <select name="fuel" required>
+              <option value="">Выберите</option>
+              {% for fuel in fuels %}
+                <option value="{{ fuel.id }}">{{ fuel.name }}</option>
+              {% endfor %}
+                {% comment %} <option>Бензин</option>
+                <option>Дизель</option>
+                <option>Электро</option> {% endcomment %}
+            </select>
+          </label>
+
+          <label class="full">
+            Описание
+            <textarea name="description" placeholder="Опишите состояние автомобиля, комплектацию, историю обслуживания..."></textarea>
+          </label>
+
+          <label class="full">
+            Фото автомобиля
+            <input type="file" name="image" required/>
+          </label>
+
+          {% comment %} <label>
+            Имя продавца
+            <input type="text" name="seller_name" placeholder="Ваше имя" />
+          </label>
+
+          <label>
+            Телефон
+            <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" />
+          </label> {% endcomment %}
+
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn primary">Опубликовать объявление</button>
+          <a href="{% url 'cars:index' %}" class="btn">Отмена</a>
+        </div>
+      </form>
+    </div>
+  </main>
+{% endblock content %}
+
+
+

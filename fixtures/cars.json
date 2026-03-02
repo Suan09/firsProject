@@ -1,0 +1,217 @@
+[
+    {
+        "model": "cars.brand",
+        "pk": 1,
+        "fields": {
+            "name": "Toyoto"
+        }
+    },
+    {
+        "model": "cars.brand",
+        "pk": 2,
+        "fields": {
+            "name": "Mersedes-Benz"
+        }
+    },
+    {
+        "model": "cars.brand",
+        "pk": 3,
+        "fields": {
+            "name": "BMW"
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 1,
+        "fields": {
+            "name": "Camry",
+            "brand": 1
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 2,
+        "fields": {
+            "name": "Corolla",
+            "brand": 1
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 3,
+        "fields": {
+            "name": "X5",
+            "brand": 3
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 4,
+        "fields": {
+            "name": "X3",
+            "brand": 3
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 5,
+        "fields": {
+            "name": "M5",
+            "brand": 3
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 6,
+        "fields": {
+            "name": "A-class",
+            "brand": 2
+        }
+    },
+    {
+        "model": "cars.carmodel",
+        "pk": 7,
+        "fields": {
+            "name": "S-class",
+            "brand": 2
+        }
+    },
+    {
+        "model": "cars.transmission",
+        "pk": 1,
+        "fields": {
+            "name": "Автомат"
+        }
+    },
+    {
+        "model": "cars.transmission",
+        "pk": 2,
+        "fields": {
+            "name": "Механика"
+        }
+    },
+    {
+        "model": "cars.transmission",
+        "pk": 3,
+        "fields": {
+            "name": "Вариатор"
+        }
+    },
+    {
+        "model": "cars.fuel",
+        "pk": 1,
+        "fields": {
+            "name": "Бензин"
+        }
+    },
+    {
+        "model": "cars.fuel",
+        "pk": 2,
+        "fields": {
+            "name": "Электро"
+        }
+    },
+    {
+        "model": "cars.fuel",
+        "pk": 3,
+        "fields": {
+            "name": "Дизель"
+        }
+    },
+    {
+        "model": "cars.car",
+        "pk": 1,
+        "fields": {
+            "brand": 1,
+            "model": 1,
+            "transmission": 2,
+            "fuel": 1,
+            "color": null,
+            "price": 140000,
+            "mileage": 120000,
+            "year": 2020,
+            "description": "в хорошем состоянии",
+            "image": "cars/camry.jpg"
+        }
+    },
+    {
+        "model": "cars.car",
+        "pk": 2,
+        "fields": {
+            "brand": 2,
+            "model": 7,
+            "transmission": 1,
+            "fuel": 1,
+            "color": null,
+            "price": 450000,
+            "mileage": 140000,
+            "year": 2025,
+            "description": "машина в отличном состоянии",
+            "image": "cars/merss_class.jpg"
+        }
+    },
+    {
+        "model": "cars.car",
+        "pk": 3,
+        "fields": {
+            "brand": 3,
+            "model": 5,
+            "transmission": 2,
+            "fuel": 1,
+            "color": null,
+            "price": 4500000,
+            "mileage": 1400000,
+            "year": 2025,
+            "description": "машина в отличном состоянии",
+            "image": "cars/bmwm5.jpg"
+        }
+    },
+    {
+        "model": "cars.car",
+        "pk": 4,
+        "fields": {
+            "brand": 3,
+            "model": 5,
+            "transmission": 2,
+            "fuel": 1,
+            "color": null,
+            "price": 450000,
+            "mileage": 1400000,
+            "year": 2025,
+            "description": "машина в отличном состоянии",
+            "image": "cars/bmwm5red.jpg"
+        }
+    },
+    {
+        "model": "cars.car",
+        "pk": 5,
+        "fields": {
+            "brand": 3,
+            "model": 3,
+            "transmission": 1,
+            "fuel": 1,
+            "color": null,
+            "price": 15299000,
+            "mileage": 10000000,
+            "year": 2020,
+            "description": "BMW X5 автомат бензин в хорошем состоянии",
+            "image": "cars/bmwx5.jpg"
+        }
+    },
+    {
+        "model": "cars.car",
+        "pk": 7,
+        "fields": {
+            "brand": 1,
+            "model": 2,
+            "transmission": 1,
+            "fuel": 2,
+            "color": null,
+            "price": 20000000,
+            "mileage": 100000,
+            "year": 2025,
+            "description": "corolla в не битый не крашенный",
+            "image": "cars/corolla.jpg"
+        }
+    }
+]

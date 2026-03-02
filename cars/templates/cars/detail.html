@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+  <head>
+    <style>
+      :root{--accent:#1e88e5;--muted:#6b7280;--card:#ffffff;--bg:#f6f7fb}
+      *{box-sizing:border-box}
+      body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:var(--bg);color:#111}
+      header{background:linear-gradient(90deg,#0f172a,#0b3a66);color:white;padding:24px}
+      .container{max-width:1100px;margin:0 auto;padding:16px}
+      .logo{font-weight:700;letter-spacing:0.4px}
+
+      main{padding:30px 0}
+
+      .card{background:var(--card);border-radius:12px;padding:24px;box-shadow:0 8px 24px rgba(16,24,40,0.06)}
+
+      .detail-grid{display:grid;gap:24px}
+      @media(min-width:900px){
+        .detail-grid{grid-template-columns:1.2fr 1fr}
+      }
+
+      .image-box img{width:100%;border-radius:12px;object-fit:cover}
+
+      .price{font-size:26px;font-weight:700;color:var(--accent);margin:10px 0}
+
+      .spec-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+      .spec-item{background:#f1f5f9;padding:12px;border-radius:8px;font-size:14px}
+
+      .description{margin-top:20px;line-height:1.6;color:#334155}
+
+      .btn-row{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+      .btn{padding:10px 16px;border-radius:8px;border:1px solid #e6e9ef;background:#fff;cursor:pointer;text-decoration:none;color:#111}
+      .btn.primary{background:var(--accent);color:white;border:none}
+
+      .seller-box{background:#f8fafc;padding:16px;border-radius:10px;margin-top:20px}
+
+      footer{padding:20px 0;color:var(--muted);font-size:14px}
+    </style>
+  </head>
+  {% comment %} <header>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center">
+      <div class="logo">AutoAds — объявления</div>
+      <a href="index.html" style="color:white;text-decoration:none">← На главную</a>
+    </div>
+  </header> {% endcomment %}
+
+  <main class="container">
+    <div class="card">
+
+      <h2>{{ car.brand.name }} {{ car.model.name }} {{ car.year }}</h2>
+      <div class="price">{{ car.price }} ₸</div>
+
+      <div class="detail-grid">
+        {% if car.image %}
+          <div class="image-box">
+            <img src="{{ car.image.url }}" alt="{{ car.brand.name }}" />
+          </div>
+        {% endif %}
+
+        <div>
+          <div class="spec-list">
+            <div class="spec-item"><strong>Год:</strong> {{ car.year }}</div>
+            <div class="spec-item"><strong>Пробег:</strong> {{ car.mileage }} км</div>
+            <div class="spec-item"><strong>Тип топлива:</strong> {{ car.fuel.name }}</div>
+            <div class="spec-item"><strong>Коробка:</strong> {{ car.transmission.name }}</div>
+            <div class="spec-item"><strong>Объем двигателя:</strong> 1.8 л</div>
+            <div class="spec-item"><strong>Цвет:</strong> Белый</div>
+          </div>
+
+          <div class="seller-box">
+            <strong>Продавец:</strong> {{user.username }}<br/>
+            <strong>Телефон:</strong> <a href="tel:+77001234567">{{ user.phone }}</a>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn primary" onclick="openContact(
+                  '{{ car.id }}',
+                  '{{ car.user.username|escapejs }}', 
+                  '{{ car.user.phone|escapejs }}'
+                )">Связаться</button>
+            <a href="{% url 'cars:index' %}" class="btn">Назад</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="description">
+        <h3>Описание</h3>
+        <p>
+          {{ car.description }}
+        </p>
+      </div>
+
+    </div>
+  </main>
+{% endblock content %}
+
+
+
+

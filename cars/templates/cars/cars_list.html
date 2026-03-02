@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <main class="container">
+    <div class="layout">
+      <section>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2 style="margin:0">Последние объявления</h2>
+          <div class="pagination" aria-label="Пагинация">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}&{{ filter_params }}"><button class="page">Назад</button></a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {# Проверка: если это текущая страница, делаем её активной #}
+              {% if page_obj.number == num %}
+                <button class="page active" style="background-color: var(--primary); color: white; background:black">{{ num }}</button>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                {# Показываем только ближайшие страницы (соседние 2), чтобы список не был слишком длинным #}
+                <a href="?page={{ num }}{% if filter_params %}&{{ filter_params }}{% endif %}">
+                  <button class="page">{{ num }}</button>
+                </a>
+              {% endif %}
+            {% endfor %}
+
+            {% comment %} <button class="page">1</button>
+            <button class="page">2</button>
+            <button class="page">3</button> {% endcomment %}
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}&{{ filter_params }}"><button class="page">Вперед</button></a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card-grid" id="list">
+          <!-- Пример одной карточки -->
+          {% for car in page_obj %}
+            <article class="card" data-id="1">
+              {% if car.image %}
+                <div class="thumb">
+                  <img src="{{ car.image.url }}" alt="{{ car.brand.name }}" />
+                </div>
+              {% endif %}
+              <div class="meta">
+                <div>
+                  <div class="title">{{ car.brand.name }} {{ car.model.name }}</div>
+                  <div class="specs">{{ car.fuel.name }} {{ car.mileage }} км</div>
+                </div>
+                <div class="price">{{ car.price }} ₸</div>
+              </div>
+
+              <p style="margin:0;color:#334155">{{ car.description }}</p>
+
+              <div class="btn-row">
+                <a href="{% url 'cars:detail' car.id %}"><button class="btn" onclick="openDetails(1)">Подробнее</button></a>
+                <button class="btn primary" onclick="openContact(
+                  '{{ car.id }}',
+                  '{{ car.user.username|escapejs }}', 
+                  '{{ car.user.phone|escapejs }}'
+                )">Связаться</button>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        {% include 'includes/includes_filter.html' %}
+
+        <div style="margin-top:12px" class="card">
+          <h4 style="margin:0 0 8px 0">Подать объявление</h4>
+          <p style="margin:0 0 10px 0;color:var(--muted)">Быстрое размещение объявления — укажите данные и контакт.</p>
+          <a href="{% url 'cars:create_car' %}"><button class="btn primary">Разместить</button></a>
+        </div>
+      </aside>
+    </div>
+  </main>
+{% endblock %}
